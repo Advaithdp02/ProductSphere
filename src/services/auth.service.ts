@@ -31,12 +31,12 @@ export const loginUser = async (email: string, password: string) => {
   if (!isMatch) {
     throw new Error("Invalid credentials");
   }
-
+  const apiKey=user.apiKey
   const token = jwt.sign(
     { userId: user._id },
     process.env.JWT_SECRET as string,
     { expiresIn: "1d" }
   );
 
-  return { token };
+  return { token,apiKey};
 };
