@@ -14,10 +14,6 @@ export class ProductController {
         res: Response,
         next: NextFunction
     ) {
-        type SortField = "price" | "createdAt" | "name";
-        function isSortField(value: any): value is SortField {
-            return ["price", "createdAt", "name"].includes(value);
-        }
         try {
             const {
                 page,

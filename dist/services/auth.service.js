@@ -26,11 +26,11 @@ exports.registerUser = registerUser;
 const loginUser = async (email, password) => {
     const user = await user_model_1.User.findOne({ email });
     if (!user) {
-        throw new Error("Invalid credentials");
+        throw new Error("Invalid Credentials");
     }
     const isMatch = await bcrypt_1.default.compare(password, user.password);
     if (!isMatch) {
-        throw new Error("Invalid credentials");
+        throw new Error("Invalid Credentials");
     }
     const token = jsonwebtoken_1.default.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
     return { token };
