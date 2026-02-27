@@ -10,7 +10,9 @@ beforeAll(async ()=>{
 
     await mongoose.connect(uri);
 });
-
+beforeAll(async () => {
+  process.env.JWT_SECRET = "testsecret";
+});
 afterAll(async ()=>{
     await mongoose.disconnect();
     await mongo.stop();
@@ -21,4 +23,5 @@ afterEach(async ()=>{
     for(const key in collections){
         await collections[key].deleteMany({});
     }
+
 });
