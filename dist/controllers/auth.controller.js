@@ -19,8 +19,8 @@ exports.register = register;
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;
-        const { token } = await (0, auth_service_1.loginUser)(email, password);
-        res.json({ token });
+        const { token, apiKey } = await (0, auth_service_1.loginUser)(email, password);
+        res.json({ token, apiKey });
     }
     catch (error) {
         res.status(400).json({ message: error.message });

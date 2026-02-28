@@ -1,0 +1,34 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runner
+    container_name: productsphere_app
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    environment:
+      # Override Redis URL to use the compose service name
+      REDIS_URL: redis://redis:6379
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: productsphere_redis
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    # Data persisted across container restarts
+    volumes:
+      - redis_data:/data
+
+volumes:
+  redis_data:

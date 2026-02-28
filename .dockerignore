@@ -1,0 +1,24 @@
+# Dependencies (reinstalled inside container)
+node_modules
+
+# TypeScript source (compiled in builder stage)
+src
+tests
+
+# Build outputs (rebuilt inside container)
+dist
+coverage
+
+# Secrets & local config
+.env
+dump.rdb
+
+# Large data file not needed in image
+data.csv
+
+# Dev/CI artifacts
+.git
+.gitignore
+*.md
+jest.config.js
+import_data.js

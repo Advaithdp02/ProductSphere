@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const product_controller_1 = require("../controllers/product.controller");
+const apiKeyAuth_1 = require("../middleware/apiKeyAuth");
+const rateLimiter_1 = require("../middleware/rateLimiter");
+const router = (0, express_1.Router)();
+router.get("/", apiKeyAuth_1.apiKeyAuth, rateLimiter_1.tierRateLimiter, product_controller_1.ProductController.getProducts);
+router.get("/:uniqId", apiKeyAuth_1.apiKeyAuth, rateLimiter_1.tierRateLimiter, product_controller_1.ProductController.getProductByUniqId);
+exports.default = router;

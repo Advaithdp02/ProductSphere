@@ -23,6 +23,8 @@ const userSchema = new mongoose_1.default.Schema({
     apiKey: {
         type: String,
         required: true,
+        index: true,
+        unique: true,
     },
 }, { timestamps: true });
 exports.User = mongoose_1.default.model("User", userSchema);
