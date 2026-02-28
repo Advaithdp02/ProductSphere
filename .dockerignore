@@ -2,9 +2,7 @@
 node_modules
 
 # TypeScript source (compiled in builder stage)
-src
-tests
-
+# (src and tests are needed during the docker build)
 # Build outputs (rebuilt inside container)
 dist
 coverage

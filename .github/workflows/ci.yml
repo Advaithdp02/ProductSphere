@@ -1,0 +1,59 @@
+name: CI — Test & Merge to Main
+
+on:
+  push:
+    branches:
+      - test
+
+permissions:
+  contents: write
+
+jobs:
+ 
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+        env:
+         
+          JWT_SECRET: ${{ secrets.JWT_SECRET || 'ci-test-secret' }}
+          NODE_ENV: test
+
+ 
+  merge-to-main:
+    name: Push to Main
+    needs: test          
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout full history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure git identity
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Merge test → main
+        run: |
+          git checkout main
+          git merge --no-ff origin/test -m "ci: auto-merge test → main after passing tests [skip ci]"
+          git push origin main
