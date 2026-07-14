@@ -87,8 +87,8 @@ describe("Product service unit test",()=>{
 
             const filtersPassed = (Product.countDocuments as jest.Mock).mock.calls[0][0];
 
-            expect(filtersPassed.$or).toBeDefined();
-            expect(filtersPassed.$or.length).toBe(3);
+            expect(filtersPassed.$text).toBeDefined();
+            expect(filtersPassed.$text.$search).toBe("iphone");
         });
 
         
