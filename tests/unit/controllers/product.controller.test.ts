@@ -60,8 +60,8 @@ describe("ProductController Unit Tests", () => {
         minPrice: undefined,
         maxPrice: undefined,
         inStock: true,
-        sortBy: undefined,
-        order: "asc"
+        sortBy: "createdAt",
+        order: "desc"
       });
 
       expect(mockRes.status).toHaveBeenCalledWith(200);
