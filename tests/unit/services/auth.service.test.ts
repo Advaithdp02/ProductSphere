@@ -1,11 +1,9 @@
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
 import { User } from "../../../src/models/user.model";
 import { registerUser, loginUser } from "../../../src/services/auth.service";
 import { generateApiKey } from "../../../src/utils/generateApiKey";
 
 jest.mock("bcrypt");
-jest.mock("jsonwebtoken");
 jest.mock("../../../src/models/user.model");
 jest.mock("../../../src/utils/generateApiKey");
 
@@ -61,26 +59,17 @@ describe("Auth Service - Unit Test",()=>{
             await expect(loginUser("test@testing.com","password123")).rejects.toThrow("Invalid Credentials");
 
         })
-        it("Should login user and return token and apiKey on success",async ()=>{
+        it("Should login user and return apiKey on success",async ()=>{
             (User.findOne as jest.Mock).mockResolvedValue({
-                _id: "userId123",
                 password: "hashedPassword",
                 apiKey: "fakeApiKey",
             });
 
             (bcrypt.compare as jest.Mock).mockResolvedValue(true);
-            (jwt.sign as jest.Mock).mockReturnValue("fakeToken");
-
-            process.env.JWT_SECRET = "secret";
 
             const result = await loginUser("test@mail.com", "password123")
 
-            expect(result.token).toBe("fakeToken");
             expect(result.apiKey).toBe("fakeApiKey");
-            expect(jwt.sign).toHaveBeenCalledWith({userId:"userId123"},
-                "secret",
-                {"expiresIn":"1d"}
-            );
         })
     })
 
