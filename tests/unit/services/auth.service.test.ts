@@ -17,7 +17,7 @@ describe("Auth Service - Unit Test",()=>{
     describe("register user",()=>{
         it("Should throw error if user already exists",async()=>{
             (User.findOne as jest.Mock).mockResolvedValue({email:"test@testing.com"});
-            await expect(registerUser("test@testing.com","pass123")).rejects.toThrow("User already exists");
+            await expect(registerUser("test@testing.com","password123")).rejects.toThrow("User already exists");
 
 
         });
