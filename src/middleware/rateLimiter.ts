@@ -29,11 +29,10 @@ export const tierRateLimiter= async (
         const limit=PLAN_LIMITS[user.plan] ||100;
         const apiKeyHash=crypto.createHash("sha256").update(user.apiKey).digest("hex");
         const redisKey=`rate:${apiKeyHash}`;
-        const multi=redis.multi();
-        multi.incr(redisKey);
-        multi.expire(redisKey,WINDOW_SECONDS);
-        const results=await multi.exec();
-        const requestCount=results![0][1] as number;
+        const requestCount=await redis.incr(redisKey);
+        if(requestCount===1){
+            await redis.expire(redisKey,WINDOW_SECONDS);
+        }
         if(requestCount>limit){
             return res.status(429).json({
                 success:false,

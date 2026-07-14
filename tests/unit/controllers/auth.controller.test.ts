@@ -76,7 +76,7 @@ describe("Auth Controller Unit Tests", () => {
 
   describe("login", () => {
 
-    it("should return token and apiKey on successful login", async () => {
+    it("should return apiKey on successful login", async () => {
 
       mockRequest.body = {
         email: "test@mail.com",
@@ -84,7 +84,6 @@ describe("Auth Controller Unit Tests", () => {
       };
 
       (authService.loginUser as jest.Mock).mockResolvedValue({
-        token: "fakeToken",
         apiKey: "fakeApiKey"
       });
 
@@ -96,7 +95,6 @@ describe("Auth Controller Unit Tests", () => {
       );
 
       expect(mockResponse.json).toHaveBeenCalledWith({
-        token: "fakeToken",
         apiKey: "fakeApiKey"
       });
     });

@@ -20,9 +20,9 @@ export const login = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
 
-    const { token,apiKey } = await loginUser(email, password);
+    const { apiKey } = await loginUser(email, password);
 
-    res.json({ token,apiKey });
+    res.json({ apiKey });
   } catch (error: any) {
     res.status(400).json({ message: error.message });
   }

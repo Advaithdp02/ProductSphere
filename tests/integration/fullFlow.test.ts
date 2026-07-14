@@ -33,7 +33,7 @@ describe("Full Flow Integration Test", () => {
       .post("/api/auth/register")
       .send({
         email: "integration@test.com",
-        password: "123456"
+        password: "12345678"
       });
 
     expect(registerRes.status).toBe(201);
@@ -44,7 +44,7 @@ describe("Full Flow Integration Test", () => {
       .post("/api/auth/login")
       .send({
         email: "integration@test.com",
-        password: "123456"
+        password: "12345678"
       });
 
     expect(loginRes.status).toBe(200);

@@ -59,7 +59,7 @@ describe("HealthController Unit Tests", () => {
 
       await HealthController.check(mockReq, mockRes);
 
-      expect(mockRes.status).toHaveBeenCalledWith(200);
+      expect(mockRes.status).toHaveBeenCalledWith(503);
       expect(mockRes.json).toHaveBeenCalledWith(
         expect.objectContaining({
           status: "degraded",
@@ -79,7 +79,7 @@ describe("HealthController Unit Tests", () => {
 
       await HealthController.check(mockReq, mockRes);
 
-      expect(mockRes.status).toHaveBeenCalledWith(200);
+      expect(mockRes.status).toHaveBeenCalledWith(503);
       expect(mockRes.json).toHaveBeenCalledWith(
         expect.objectContaining({
           status: "degraded",
@@ -99,7 +99,7 @@ describe("HealthController Unit Tests", () => {
 
       await HealthController.check(mockReq, mockRes);
 
-      expect(mockRes.status).toHaveBeenCalledWith(200);
+      expect(mockRes.status).toHaveBeenCalledWith(503);
       expect(mockRes.json).toHaveBeenCalledWith(
         expect.objectContaining({
           status: "degraded",
