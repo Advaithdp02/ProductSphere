@@ -3,11 +3,6 @@ import mongoose from 'mongoose';
 import Product, { IProduct } from '../models/product.model';
 import { redis } from "../config/redis"
 
-// ponytail: regex escape for safe MongoDB $regex interpolation
-function escapeRegex(str: string): string {
-    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-}
-
 
 type SortField = "price" | "createdAt" | "title";
 
@@ -80,12 +75,7 @@ export class ProductService {
         }
 
         if (options.search) {
-            const safe = escapeRegex(options.search);
-            filters.$or = [
-                { title: { $regex: safe, $options: "i" } },
-                { description: { $regex: safe, $options: "i" } },
-                { brand: { $regex: safe, $options: "i" } },
-            ];
+            filters.$text = { $search: options.search };
         }
 
         // ponytail: md5 hex is collision-resistant enough for cache keys; add salt/algorithm upgrade if key space grows
