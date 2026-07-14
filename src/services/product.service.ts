@@ -2,6 +2,11 @@ import mongoose from 'mongoose';
 import Product, { IProduct } from '../models/product.model';
 import { redis } from "../config/redis"
 
+// ponytail: regex escape for safe MongoDB $regex interpolation
+function escapeRegex(str: string): string {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
 
 type SortField = "price" | "createdAt" | "title";
 
@@ -74,10 +79,11 @@ export class ProductService {
         }
 
         if (options.search) {
+            const safe = escapeRegex(options.search);
             filters.$or = [
-                { title: { $regex: options.search, $options: "i" } },
-                { description: { $regex: options.search, $options: "i" } },
-                { brand: { $regex: options.search, $options: "i" } },
+                { title: { $regex: safe, $options: "i" } },
+                { description: { $regex: safe, $options: "i" } },
+                { brand: { $regex: safe, $options: "i" } },
             ];
         }
 
