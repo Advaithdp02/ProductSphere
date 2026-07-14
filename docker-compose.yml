@@ -2,6 +2,8 @@ version: "3.9"
 
 services:
 
+  # App replicas: each instance must be listed here AND in nginx.conf upstream block.
+  # Nginx uses static upstreams, so scaling = add a new service + update nginx.conf.
   app1:
     build:
       context: .
