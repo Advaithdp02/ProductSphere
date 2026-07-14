@@ -1,3 +1,4 @@
+import crypto from "crypto";
 import mongoose from 'mongoose';
 import Product, { IProduct } from '../models/product.model';
 import { redis } from "../config/redis"
@@ -87,7 +88,8 @@ export class ProductService {
             ];
         }
 
-        const cachekey = `products:page=${page}:limit=${limit}:category=${options.category || "all"}:brand=${options.brand || "all"}:site=${options.siteName || "all"}:min=${options.minPrice || 0}:max=${options.maxPrice || 0}:stock=${options.inStock ?? "all"}:sort=${sortField}:${sortOrder}:search=${options.search || "none"}`;
+        // ponytail: md5 hex is collision-resistant enough for cache keys; add salt/algorithm upgrade if key space grows
+        const cachekey = `products:${crypto.createHash("md5").update(JSON.stringify(options)).digest("hex")}`;
 
         const cachedData = await redis.get(cachekey);
         if (cachedData) {
