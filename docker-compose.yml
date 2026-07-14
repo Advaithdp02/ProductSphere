@@ -10,7 +10,7 @@ services:
     env_file:
       - .env
     environment:
-      REDIS_URL: redis://redis:6379
+      REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379
     depends_on:
       redis:
         condition: service_healthy
@@ -24,7 +24,7 @@ services:
     env_file:
       - .env
     environment:
-      REDIS_URL: redis://redis:6379
+      REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379
     depends_on:
       redis:
         condition: service_healthy
@@ -38,7 +38,7 @@ services:
     env_file:
       - .env
     environment:
-      REDIS_URL: redis://redis:6379
+      REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379
     depends_on:
       redis:
         condition: service_healthy
@@ -60,6 +60,9 @@ services:
   redis:
     image: redis:7-alpine
     container_name: productsphere_redis
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    environment:
+      REDISCLI_AUTH: ${REDIS_PASSWORD}
     restart: unless-stopped
     volumes:
       - redis_data:/data
