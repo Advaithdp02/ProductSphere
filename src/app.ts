@@ -6,7 +6,10 @@ import morgan from "morgan";
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+    origin: process.env.ALLOWED_ORIGINS?.split(",") || "http://localhost:3000",
+    credentials: true,
+}));
 app.use(helmet());
 app.use(morgan("dev"))
 app.use(express.json());
