@@ -46,7 +46,7 @@ export const apiKeyAuth = async (
 
     req.user = user;
     next();
-  } catch (e) {
+  } catch (_e) {
     return res.status(500).json({
       success: false,
       message: "Authentication Failed",

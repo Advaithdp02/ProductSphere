@@ -1,5 +1,4 @@
 import crypto from "crypto";
-import mongoose from 'mongoose';
 import Product, { IProduct } from '../models/product.model';
 import { redis } from "../config/redis"
 

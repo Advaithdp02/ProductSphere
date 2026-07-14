@@ -41,7 +41,7 @@ export const tierRateLimiter= async (
             });
         }
         next();
-    }catch(e){
+    }catch(_e){
         return res.status(500).json({
                 success:false,
                 message:"RATE LIMITING FAILED"
