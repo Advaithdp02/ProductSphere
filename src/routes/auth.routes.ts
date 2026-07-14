@@ -18,7 +18,7 @@ const authRateLimit = async (req: Request, res: Response, next: NextFunction) =>
       return res.status(429).json({ message: "Too many attempts, try again later" });
     }
     next();
-  } catch (err) {
+  } catch (_err) {
     // Fail open — allow request if Redis is down
     next();
   }
