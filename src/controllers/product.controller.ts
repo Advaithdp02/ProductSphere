@@ -1,10 +1,21 @@
 import { Request, Response, NextFunction } from 'express';
+import { z } from 'zod';
 import { ProductService } from '../services/product.service';
 import { getProductsOptions } from '../services/product.service';
 
-
-
-
+const ProductQuerySchema = z.object({
+    page: z.coerce.number().int().min(1).default(1),
+    limit: z.coerce.number().int().min(1).max(100).default(20),
+    category: z.string().optional(),
+    brand: z.string().optional(),
+    siteName: z.string().optional(),
+    minPrice: z.coerce.number().min(0).optional(),
+    maxPrice: z.coerce.number().min(0).optional(),
+    inStock: z.enum(["true", "false"]).optional(),
+    sortBy: z.string().default("createdAt"),
+    sortOrder: z.enum(["asc", "desc"]).default("desc"),
+    search: z.string().optional(),
+});
 
 export class ProductController {
 
@@ -15,35 +26,28 @@ export class ProductController {
         next: NextFunction
     ) {
         try {
-            const {
-                page,
-                limit,
-                search,
-                category,
-                brand,
-                siteName,
-                minPrice,
-                maxPrice,
-                inStock,
-                sortBy,
-                order
-            } = req.query;
+            const parsed = ProductQuerySchema.safeParse(req.query);
+            if (!parsed.success) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Invalid query parameters",
+                    errors: parsed.error.flatten(),
+                });
+            }
 
+            const q = parsed.data;
             const options: getProductsOptions = {
-                page: typeof page === "string" ? Number(page) : undefined,
-                limit: typeof limit === "string" ? Number(limit) : undefined,
-                search: typeof search === "string" ? search : undefined,
-                category: typeof category === "string" ? category : undefined,
-                brand: typeof brand === "string" ? brand : undefined,
-                siteName: typeof siteName === "string" ? siteName : undefined,
-                minPrice: typeof minPrice === "string" ? Number(minPrice) : undefined,
-                maxPrice: typeof maxPrice === "string" ? Number(maxPrice) : undefined,
-                inStock:typeof inStock === "string"? inStock === "true": undefined,
-                sortBy: sortBy as any,
-                order:
-                    order === "asc" || order === "desc"
-                        ? order
-                        : undefined
+                page: q.page,
+                limit: q.limit,
+                search: q.search,
+                category: q.category,
+                brand: q.brand,
+                siteName: q.siteName,
+                minPrice: q.minPrice,
+                maxPrice: q.maxPrice,
+                inStock: q.inStock === "true" ? true : q.inStock === "false" ? false : undefined,
+                sortBy: q.sortBy as any,
+                order: q.sortOrder,
             };
 
             const result = await ProductService.getProducts(options);
