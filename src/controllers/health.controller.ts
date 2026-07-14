@@ -34,7 +34,7 @@ export class HealthController {
       (s) => s.status === "ok"
     );
 
-    res.status(200).json({
+    res.status(allHealthy ? 200 : 503).json({
       status: allHealthy ? "ok" : "degraded",
       timestamp: new Date().toISOString(),
       services
