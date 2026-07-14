@@ -45,7 +45,7 @@ export class ProductService {
     ): Promise<PaginatedResponse<IProduct>> {
 
         const page: number = Math.max(options.page || 1, 1);
-        const limit: number = Math.max(options.limit || 20, 1);
+        const limit: number = Math.min(Math.max(options.limit || 20, 1), 100);
         const skip = (page - 1) * limit;
 
         const sortField: SortField = options.sortBy ?? "createdAt";
