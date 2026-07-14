@@ -23,7 +23,7 @@ export interface IProduct extends Document {
 
 const productSchema: Schema<IProduct> = new Schema(
   {
-    uniqId: { type: String, unique: true, index: true, required: true },
+    uniqId: { type: String, unique: true, required: true },
     crawlTimestamp: Date,
     category: String,
     title: String,
@@ -41,6 +41,14 @@ const productSchema: Schema<IProduct> = new Schema(
   },
   { timestamps: true }
 );
+
+// Text index for search (replaces $regex full scans)
+productSchema.index({ title: "text", description: "text", brand: "text" });
+
+// Filter indexes
+productSchema.index({ category: 1, brand: 1 });
+productSchema.index({ price: 1 });
+productSchema.index({ siteName: 1 });
 
 
 const Product: Model<IProduct> = mongoose.model<IProduct>(
