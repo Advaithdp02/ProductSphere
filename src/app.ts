@@ -11,7 +11,9 @@ app.use(cors({
     credentials: true,
 }));
 app.use(helmet());
-app.use(morgan("dev"))
+app.use(morgan(process.env.NODE_ENV === "production" ? "combined" : "dev", {
+    skip: (req) => req.url === "/api/health",
+}));
 app.use(express.json());
 
 app.use('/api',router)
